@@ -42,7 +42,7 @@ This command will add an annotation to Grafana with the tags kind:deployment, 
 
 # patchAnnotations.sh
 
-## Overview
+## Introduction
 `patchAnnotations.sh` is a Bash script designed to update annotations in Grafana. Annotations in Grafana are used to mark points on the graph with rich events. This script facilitates the automation of updating these annotations based on various deployment-related parameters.
 
 ## Parameters
