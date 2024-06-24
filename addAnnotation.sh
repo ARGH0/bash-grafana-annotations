@@ -104,13 +104,16 @@ main() {
     local collection="$9"
     local pipeline_type="${10}"
 
-    local tags_string=$(build_tags "$kind" "$type" "$environment" "$build_number" "$component" "$image_tag" "$collection" "$pipeline_type")
-    local text=$(build_text "$type" "$component" "$environment" "$build_number" "$collection")
+    local tags_string
+    tags_string=$(build_tags "$kind" "$type" "$environment" "$build_number" "$component" "$image_tag" "$collection" "$pipeline_type")
+    local text
+    text=$(build_text "$type" "$component" "$environment" "$build_number" "$collection")
 
     local current_time_seconds=$((1000 * $(date +%s)))
 
     # create an annotation request body
-    local json_string="$(
+    local json_string
+    json_string="$(
         jq -n --arg time "$current_time_seconds" \
             --arg timeEnd "$current_time_seconds" \
             --argjson tags "[$tags_string]" \
@@ -124,13 +127,15 @@ main() {
     )"
 
     # Send an annotation to Grafana
-    local post_result=$(curl -X POST "${grafana_server}/api/annotations" \
+    local post_result
+    post_result=$(curl -X POST "${grafana_server}/api/annotations" \
         -H "Accept: application/json" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${grafana_token}" \
         -d "${json_string}")
 
-    local annotation_id="$(jq -r '.id' <<<"${post_result}")"
+    local annotation_id
+    annotation_id="$(jq -r '.id' <<<"${post_result}")"
 
     echo ""
     echo "||#####################||"

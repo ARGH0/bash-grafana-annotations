@@ -73,13 +73,15 @@ main() {
     local image_tag="$8"
     local collection="$9"
 
-    local annotationGetUri=$(build_annotation_uri "$grafana_server" "$kind" "$type" "$environment" "$build_number" "$component" "$image_tag" "$collection")
+    local annotationGetUri
+    annotationGetUri=$(build_annotation_uri "$grafana_server" "$kind" "$type" "$environment" "$build_number" "$component" "$image_tag" "$collection")
 
     echo "--"
     echo "${annotationGetUri}"
     echo "--"
 
-    local get_result=$(curl -X GET "${annotationGetUri}" \
+    local get_result
+    get_result=$(curl -X GET "${annotationGetUri}" \
         -H "Accept: application/json" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${grafana_token}")
@@ -92,7 +94,8 @@ main() {
         exit 1
     fi
 
-    local annotation_id="$(jq -r '.[] | .id' <<<"${get_result}")"
+    local annotation_id
+    annotation_id="$(jq -r '.[] | .id' <<<"${get_result}")"
 
     if [ "$(wc -w <<< "${annotation_id}")" -gt 1 ]; then
         echo ""
@@ -105,18 +108,19 @@ main() {
     local current_end_time_seconds=$((1000 * $(date +%s)))
 
     # create an annotation request body
-    local json_string="$(
+    local json_string
+    json_string="$(
         jq -n --arg timeEnd "$current_end_time_seconds" \
             '{
                 "timeEnd": ( $timeEnd | tonumber),
             }'
     )"
 
-    local patch_result=$(curl -X PATCH "${grafana_server}/api/annotations/${annotation_id}" \
+    curl -X PATCH "${grafana_server}/api/annotations/${annotation_id}" \
         -H "Accept: application/json" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${grafana_token}" \
-        -d "${json_string}")
+        -d "${json_string}"
 
     echo ""
     echo "||#####################||"

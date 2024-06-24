@@ -67,11 +67,11 @@ json_string="$(
         }'
 )"
 
-update_result=$(curl -X PUT "${grafana_server}/api/annotations/${annotation_id}" \
+curl -X PUT "${grafana_server}/api/annotations/${annotation_id}" \
     -H "Accept: application/json" \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer ${token}" \
-    -d "${json_string}")
+    -d "${json_string}"
 
 echo ""
 echo "||#####################||"
