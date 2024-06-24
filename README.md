@@ -4,7 +4,7 @@ https://grafana.com/docs/grafana/latest/developers/http_api/annotations/
 
 I use these scripts to do CRUD actions on the grafana annotations within my pipelines
 
---- How to use the scripts:
+# How to use the scripts:
 
 # addAnnotation.sh
 
