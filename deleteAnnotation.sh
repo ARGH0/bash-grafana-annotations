@@ -1,6 +1,23 @@
 #!/bin/bash
 set -e
 
+build_tags_query() {
+    local tags=("$@")
+    local tags_query=""
+    local first_tag=1 # Flag to indicate the first tag
+
+    for tag in "${tags[@]}"; do
+        if [[ $first_tag -eq 1 ]]; then
+            tags_query+="tags=${tag}"
+            first_tag=0
+        else
+            tags_query+="&tags=${tag}"
+        fi
+    done
+
+    echo "$tags_query"
+}
+
 delete_annotation() {
     local annotation_id="$1"
     local delete_result=$(curl -X DELETE "${grafana_server}/api/annotations/${annotation_id}" \
@@ -21,10 +38,7 @@ main() {
     local grafana_token="$2"
     shift 2 # Shift the first two arguments out to process the rest as tags
     local tags=("$@") # Remaining arguments are considered as tags
-    local tags_query=""
-    for tag in "${tags[@]}"; do
-        tags_query+="&tags=${tag}"
-    done
+    local tags_query=$(build_tags_query "${tags[@]}")
 
     echo ""
     echo "||#####################||"
