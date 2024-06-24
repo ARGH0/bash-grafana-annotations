@@ -77,4 +77,4 @@ The script accepts several parameters:
 bash /path/to/patchAnnotations.sh "http://localhost:3000" "your_grafana_token" "deployment" "infrastructure" "production" "123" "web-server" "v1.0.0" "web-servers"
 ```
 
-This command sends a GET request to the Grafana API to fetch an annotation with the tags kind:deployment, type:infrastructure, env:production, build:123, component:web-server, image:v1.0.0, and collection:web-servers. The script then processes the response and updates the annotation as necessary. ```
+This command sends a GET request to the Grafana API to fetch an annotation with the tags kind:deployment, type:infrastructure, env:production, build:123, component:web-server, image:v1.0.0, and collection:web-servers. The script then processes the response and updates the annotation as necessary.
