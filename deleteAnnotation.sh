@@ -2,6 +2,11 @@
 set -e
 
 build_tags_query() {
+    # Function to build tags query
+    # Parameters:
+    #   - tags: The tags to build the query
+    # Returns:
+    #   - tags_query: The built tags query
     local tags=("$@")
     local tags_query=""
     local first_tag=1 # Flag to indicate the first tag
@@ -19,6 +24,9 @@ build_tags_query() {
 }
 
 delete_annotation() {
+    # Function to delete an annotation
+    # Parameters:
+    #   - annotation_id: The ID of the annotation to delete
     local annotation_id="$1"
     local delete_result
 
@@ -29,13 +37,18 @@ delete_annotation() {
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${grafana_token}")
     if [ -z "${delete_result}" ]; then
-        echo "Failed to delete annotation: ${annotation_id}"
+        echo "${delete_result}"
     else
         echo "Annotation deleted: ${annotation_id}"
     fi
 }
 
 main() {
+    # Main function to delete an annotation from Grafana
+    # Parameters:
+    #   - grafana_server: The URL of the Grafana server
+    #   - grafana_token: The authentication token for Grafana
+    #   - tags: The tags to search for annotations
     local grafana_server="$1"
     local grafana_token="$2"
     shift 2 # Shift the first two arguments out to process the rest as tags
@@ -60,7 +73,7 @@ main() {
         exit 1
     fi
 
-    # echo "$get_result" | jq .
+    echo "$get_result" | jq .
 
     annotation_ids=($(jq -r '.[] | .id' <<<"${get_result}"))
     if [ ${#annotation_ids[@]} -eq 0 ]; then
