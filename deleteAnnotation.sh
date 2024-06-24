@@ -21,12 +21,13 @@ build_tags_query() {
 delete_annotation() {
     local annotation_id="$1"
     local delete_result
-    delete_result=$(curl deleteELETE "${grafana_server}/api/annotations/${annotation_id}" \
+
+    echo ""
+    echo "||#####################||"
+    delete_result=$(curl -X DELETE "${grafana_server}/api/annotations/${annotation_id}" \
             -H "Accept: application/json" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${grafana_token}")
-    echo ""
-    echo "||#####################||"
     if [ -z "${delete_result}" ]; then
         echo "Failed to delete annotation: ${annotation_id}"
     else
@@ -50,6 +51,7 @@ main() {
         -H "Accept: application/json" \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${grafana_token}")
+       
     if [ -z "${get_result}" ]; then
         echo ""
         echo "||!!!!!!!!!!!!!!!!!!!!!||"
@@ -57,6 +59,9 @@ main() {
         echo "------"
         exit 1
     fi
+
+    # echo "$get_result" | jq .
+
     annotation_ids=($(jq -r '.[] | .id' <<<"${get_result}"))
     if [ ${#annotation_ids[@]} -eq 0 ]; then
         echo ""
