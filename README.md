@@ -78,3 +78,25 @@ bash /path/to/patchAnnotations.sh "http://localhost:3000" "your_grafana_token" "
 ```
 
 This command sends a GET request to the Grafana API to fetch an annotation with the tags kind:deployment, type:infrastructure, env:production, build:123, component:web-server, image:v1.0.0, and collection:web-servers. The script then processes the response and updates the annotation as necessary.
+
+# deleteAnnotation.sh
+
+## Introduction
+The `deleteAnnotation.sh` script is designed for managing annotations in Grafana by allowing users to delete annotations based on specific tags. This utility interacts with the Grafana API to search for and delete annotations, making it a powerful tool for maintaining clean and relevant data within Grafana dashboards.
+
+## Parameters
+- `Grafana Server URL`: The URL where your Grafana instance is hosted.
+- `Grafana API Token`: A valid API token from your Grafana instance with permissions to delete annotations.
+- `Tags`: One or more tags used to identify the annotations to be deleted. Annotations matching all provided tags will be targeted for deletion.
+
+## How it works
+1. **Build Tags Query**: The script starts by constructing a query from the provided tags. This query is used to search for annotations within the Grafana instance.
+2. **Search Annotations**: Using the constructed query, the script makes a request to the Grafana API to find annotations matching the specified tags.
+3. **Delete Annotations**: For each annotation found, the script sends a delete request to the Grafana API to remove the annotation from the system.
+
+## Example Usage
+
+```bash
+bash /path/to/deleteAnnotation.sh "http://localhost:3000" "your_grafana_token" "tags_1" "tags_2" "tags_3" "tags_4"
+```
+
