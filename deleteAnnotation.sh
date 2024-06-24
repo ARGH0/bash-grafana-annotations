@@ -20,10 +20,11 @@ build_tags_query() {
 
 delete_annotation() {
     local annotation_id="$1"
-    local delete_result=$(curl -X DELETE "${grafana_server}/api/annotations/${annotation_id}" \
-        -H "Accept: application/json" \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer ${grafana_token}")
+    local delete_result
+    delete_result=$(curl deleteELETE "${grafana_server}/api/annotations/${annotation_id}" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${grafana_token}")
     echo ""
     echo "||#####################||"
     if [ -z "${delete_result}" ]; then
@@ -38,7 +39,8 @@ main() {
     local grafana_token="$2"
     shift 2 # Shift the first two arguments out to process the rest as tags
     local tags=("$@") # Remaining arguments are considered as tags
-    local tags_query=$(build_tags_query "${tags[@]}")
+    local tags_query
+    tags_query=$(build_tags_query "${tags[@]}")
 
     echo ""
     echo "||#####################||"
